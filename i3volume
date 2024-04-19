@@ -1,0 +1,20 @@
+#!/bin/bash
+
+
+v=$(amixer sget Master | awk -F"[][]" '/Left/{ print $2 }')
+m=$(amixer sget Master | awk -F"[][]" '/Left/{ print $4 }')
+
+
+volume="${v//[^0-9]/}"
+muted="${m//[^A-Za-z]/}"
+
+
+case $muted in
+    "on")
+        echo "Volume: ${volume}%"
+        ;;
+    "off")
+        echo "Volume: muted"
+        ;;
+esac
+

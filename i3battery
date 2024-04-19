@@ -1,0 +1,28 @@
+#!/bin/bash
+
+
+charge=$(acpi | awk -F" " '{ print $4 }')
+s=$(acpi | awk -F" " '{ print $3 }')
+
+
+state=${s//[^A-Za-z]/}
+
+
+case $state in 
+    "Charging")
+        # echo "Je moeder"
+        ;;
+    "Discharging")
+
+        ;;
+    "Low")
+
+        ;;
+    "Full")
+
+        ;;
+
+esac
+
+
+echo -e " Battery: $charge $state"
