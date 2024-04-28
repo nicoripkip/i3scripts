@@ -1,10 +1,21 @@
 #!/bin/bash
 
 
-d=$(aplay -l | awk -F '[][]' '{ print $3 }')
+d=$(pactl list sinks | grep "Naam: " | awk -F ':' '{ print $2 }')
 
-devices="${d//[^A-Za-z ,:0-9]/}"
+#devices="${d//[^A-Za-z -_.0-9]/}"
 
-device=$(echo -e $devices | tr ',' '\n' | rofi -dmenu -p "Select audio device")
+device=$(echo -e $d | tr ' ' '\n' | rofi -dmenu -p "Select audio device")
 
-echo "$device"
+sink=$(pactl list sinks | grep -B 2 "Naam: $device")
+
+n=$(echo $sink | awk '{ print $2 }')
+number=${n//[^0-9]/}
+
+state=$(echo $sink | grep "Toestand:" | awk '{ print $4 }')
+
+if [[ "$state" != "RUNNING" ]] then
+    pactl set-default-sink "$number"
+else
+    echo "Device is already selected!"
+fi
