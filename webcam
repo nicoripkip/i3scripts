@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 
 pkill -f /dev/video || mpv --autofit=30%  /dev/video0
